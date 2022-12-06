@@ -9,13 +9,9 @@ const {
 } = require("../controllers/seconds");
 
 router.get("/", findSeconds);
-
 router.get("/:id", findOneSecond);
-
 router.post("/", createSecond);
-
 router.put("/:id", updateSecond);
-
 router.delete("/:id", deleteSecond);
 
 module.exports = router;

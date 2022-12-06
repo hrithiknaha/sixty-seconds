@@ -34,7 +34,7 @@ const findOneSecond = (req, res) => {
             return res.status(200).json({
                 success: true,
                 message: "No Seconds found.",
-                documents: second,
+                documents: [],
             });
         return res.status(200).json({
             success: true,
@@ -46,6 +46,13 @@ const findOneSecond = (req, res) => {
 
 const createSecond = (req, res) => {
     const { title, description } = req.body;
+
+    if (title === undefined && description === undefined)
+        return res.status(400).json({
+            success: false,
+            message: "Title and Description are needed.",
+        });
+
     const second = new Seconds({ title, description });
 
     second.save((err, second) => {
@@ -81,7 +88,7 @@ const updateSecond = (req, res) => {
                 return res.status(200).json({
                     success: true,
                     message: "No Seconds found.",
-                    documents: second,
+                    documents: [],
                 });
             return res.status(200).json({
                 success: true,
@@ -93,12 +100,18 @@ const updateSecond = (req, res) => {
 };
 
 const deleteSecond = (req, res) => {
-    Seconds.findByIdAndDelete(req.params.id, (err) => {
+    Seconds.findByIdAndDelete(req.params.id, (err, second) => {
         if (err)
             return res.status(500).json({
                 success: false,
                 message: "Error while deleting seconds",
                 error: `${err}`,
+            });
+        if (second === null)
+            return res.status(200).json({
+                success: true,
+                message: "No Seconds found to delete.",
+                documents: [],
             });
         return res.status(200).json({
             success: true,
